@@ -44,11 +44,21 @@ mgr.events.addSilentRenewError(function () {
 
 mgr.events.addUserSignedOut(function () {
   console.log('UserSignedOut：', arguments);
-  mgr.signoutRedirect().then(function (resp) {
-    console.log('signed out', resp);
-  }).catch(function (err) {
-    console.log(err)
+  // mgr.signoutRedirect().then(function (resp) {
+  //   console.log('signed out', resp);
+  // }).catch(function (err) {
+  //   console.log(err)
+  // })
+  mgr.getUser().then(user => {
+    if(user) {
+      mgr.removeUser(user).then(() => {
+        mgr.signinRedirect()
+      })
+    } else {
+      mgr.signinRedirect()
+    }
   })
+
 });
 
 export default {
